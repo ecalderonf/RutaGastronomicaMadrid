@@ -21,7 +21,7 @@ public class PlatoTipicoController {
     }
 
     // Obtener todos los platos típicos
-    @GetMapping("/")
+    @GetMapping("")
     List<PlatoTipico> buscarPlatosTipicos(){ return platosTipicosService.buscarPlatosTipicos(); }
 
     // Obtener plato tipico por Id
@@ -57,7 +57,7 @@ public class PlatoTipicoController {
         return ResponseEntity.ok(platoTipicoResult);
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         platosTipicosService.eliminar(id);
         return ResponseEntity.noContent().build();

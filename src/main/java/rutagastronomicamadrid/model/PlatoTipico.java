@@ -1,9 +1,6 @@
 package rutagastronomicamadrid.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
@@ -16,8 +13,9 @@ public class PlatoTipico {
     @NotNull
     private String nombre;
 
-    @Pattern(regexp = "ENTRADA|SOPA|ENSALADA|PRINCIPAL|POSTRE")
-    private String categoria;
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private CategoriaPlato categoria;
 
     private String descripcion;
 
@@ -27,7 +25,7 @@ public class PlatoTipico {
 
     private String foto;
 
-    public PlatoTipico(String nombre, String categoria, String descripcion, String ingredientes, String receta, String foto) {
+    public PlatoTipico(String nombre, CategoriaPlato categoria, String descripcion, String ingredientes, String receta, String foto) {
         this.nombre = nombre;
         this.categoria = categoria;
         this.descripcion = descripcion;
@@ -55,11 +53,11 @@ public class PlatoTipico {
         this.nombre = nombre;
     }
 
-    public String getCategoria() {
+    public CategoriaPlato  getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(CategoriaPlato  categoria) {
         this.categoria = categoria;
     }
 
@@ -93,5 +91,18 @@ public class PlatoTipico {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    @Override
+    public String toString() {
+        return "PlatoTipico{" +
+                "id_plato=" + id_plato +
+                ", nombre='" + nombre + '\'' +
+                ", categoria=" + categoria +
+                ", descripcion='" + descripcion + '\'' +
+                ", ingredientes='" + ingredientes + '\'' +
+                ", receta='" + receta + '\'' +
+                ", foto='" + foto + '\'' +
+                '}';
     }
 }
