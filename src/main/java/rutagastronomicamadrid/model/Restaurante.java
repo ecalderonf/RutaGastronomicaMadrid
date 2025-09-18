@@ -9,6 +9,8 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_restaurante;
 
+    private String reference;
+
     @NotNull
     private String nombre;
 
@@ -28,7 +30,8 @@ public class Restaurante {
     public Restaurante() {
     }
 
-    public Restaurante(String nombre, String domicilio, Integer pricelevel, Double rating, Double latitude, Double longitude, String photoreference) {
+    public Restaurante(String reference, String nombre, String domicilio, Integer pricelevel, Double rating, Double latitude, Double longitude, String photoreference) {
+        this.reference = reference;
         this.nombre = nombre;
         this.domicilio = domicilio;
         this.pricelevel = pricelevel;
@@ -47,6 +50,12 @@ public class Restaurante {
 
     public void setId_restaurante(Long id_restaurante) {
         this.id_restaurante = id_restaurante;
+    }
+
+    public String getReference() { return reference; }
+
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 
     public String getNombre() {

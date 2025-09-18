@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/platosTipicos")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PlatoTipicoController {
 
     private final PlatoTipicoService platosTipicosService;

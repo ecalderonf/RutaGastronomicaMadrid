@@ -2,7 +2,7 @@ package rutagastronomicamadrid.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import rutagastronomicamadrid.feign.GooglePlacesClient;
+import rutagastronomicamadrid.feign.RestauranteClient;
 import rutagastronomicamadrid.model.Restaurante;
 import rutagastronomicamadrid.repository.RestauranteRepository;
 
@@ -18,9 +18,9 @@ public class RestauranteService {
 
     private final RestauranteRepository repository;
 
-    private final GooglePlacesClient client;
+    private final RestauranteClient client;
 
-    public RestauranteService(RestauranteRepository repository, GooglePlacesClient client) {
+    public RestauranteService(RestauranteRepository repository, RestauranteClient client) {
         this.repository = repository;
         this.client = client;
     }
@@ -63,8 +63,9 @@ public class RestauranteService {
         );
         var response = client.buscarRestaurantes(query, apiKey);
 
-        return response.results().stream()
+        return response.getBody().results().stream()
                 .map(r -> new Restaurante(
+                        r.reference(),
                         r.name(),
                         r.domicilio(),
                         r.priceLevel(),
