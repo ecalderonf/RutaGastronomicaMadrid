@@ -16,33 +16,40 @@ public class RestauranteService {
     @Value("${google.api.key}")
     private String apiKey;
 
-    private final RestauranteRepository repository;
+    private final RestauranteRepository restauranteRepository;
 
     private final RestauranteClient client;
 
-    public RestauranteService(RestauranteRepository repository, RestauranteClient client) {
-        this.repository = repository;
+    public RestauranteService(RestauranteRepository restauranteRepository, RestauranteClient client) {
+        this.restauranteRepository = restauranteRepository;
         this.client = client;
     }
 
     public List<Restaurante> listarTodos() {
-        return repository.findAll();
+        return restauranteRepository.findAll();
     }
 
     public Optional<Restaurante> obtenerPorId(Long id) {
-        return repository.findById(id);
+        return restauranteRepository.findById(id);
     }
 
+    public Optional<Restaurante> obtenerPorReference(String reference) {
+        return restauranteRepository.findByReference(reference);
+    }
+
+    public List<Restaurante> buscarPorNombrePlatoTipico(String nombrePlato) {
+        return restauranteRepository.findByNombrePlatoTipico(nombrePlato.trim());
+    }
     public Restaurante guardar(Restaurante restaurante) {
-        return repository.save(restaurante);
+        return restauranteRepository.save(restaurante);
     }
 
     public void eliminar(Long id) {
-        repository.deleteById(id);
+        restauranteRepository.deleteById(id);
     }
 
     public Restaurante actualizar(Long id, Restaurante datosActualizados) {
-        return repository.findById(id)
+        return restauranteRepository.findById(id)
                 .map(r -> {
                     r.setNombre(datosActualizados.getNombre());
                     r.setDomicilio(datosActualizados.getDomicilio());
@@ -51,7 +58,8 @@ public class RestauranteService {
                     r.setLatitude(datosActualizados.getLatitude());
                     r.setLongitude(datosActualizados.getLongitude());
                     r.setPhotoreference(datosActualizados.getPhotoreference());
-                    return repository.save(r);
+                    r.setPlatosTipicos(datosActualizados.getPlatosTipicos());
+                    return restauranteRepository.save(r);
                 })
                 .orElseThrow(() -> new RuntimeException("Restaurante no encontrado"));
     }

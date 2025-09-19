@@ -3,6 +3,9 @@ package rutagastronomicamadrid.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Restaurante {
     @Id
@@ -27,10 +30,20 @@ public class Restaurante {
     @Column(length = 1000)
     private String photoreference;
 
+    @ManyToMany
+    @JoinTable(
+            name = "restaurante_plato_tipico",
+            joinColumns = @JoinColumn(name = "restaurante_id"),
+            inverseJoinColumns = @JoinColumn(name = "plato_tipico_id")
+    )
+    private List<PlatoTipico> platosTipicos = new ArrayList<>();
+
     public Restaurante() {
     }
 
-    public Restaurante(String reference, String nombre, String domicilio, Integer pricelevel, Double rating, Double latitude, Double longitude, String photoreference) {
+    public Restaurante(String reference, String nombre, String domicilio, Integer pricelevel
+            , Double rating, Double latitude, Double longitude, String photoreference
+            ) {
         this.reference = reference;
         this.nombre = nombre;
         this.domicilio = domicilio;
@@ -39,6 +52,21 @@ public class Restaurante {
         this.latitude = latitude;
         this.longitude = longitude;
         this.photoreference = photoreference;
+    }
+
+    public Restaurante(String reference, String nombre, String domicilio, Integer pricelevel
+            , Double rating, Double latitude, Double longitude, String photoreference
+            , List<PlatoTipico> platosTipicos
+    ) {
+        this.reference = reference;
+        this.nombre = nombre;
+        this.domicilio = domicilio;
+        this.pricelevel = pricelevel;
+        this.rating = rating;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.photoreference = photoreference;
+        this.platosTipicos = platosTipicos;
     }
 
     // getter y setter
@@ -114,10 +142,19 @@ public class Restaurante {
         this.photoreference = photoreference;
     }
 
+    public List<PlatoTipico> getPlatosTipicos() {
+        return platosTipicos;
+    }
+
+    public void setPlatosTipicos(List<PlatoTipico> platosTipicos) {
+        this.platosTipicos = platosTipicos;
+    }
+
     @Override
     public String toString() {
         return "Restaurante{" +
                 "id_restaurante=" + id_restaurante +
+                ", reference='" + reference + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", domicilio='" + domicilio + '\'' +
                 ", pricelevel=" + pricelevel +
@@ -125,6 +162,7 @@ public class Restaurante {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", photoreference='" + photoreference + '\'' +
+                ", platosTipicos=" + platosTipicos +
                 '}';
     }
 }

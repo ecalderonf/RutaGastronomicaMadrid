@@ -1,7 +1,10 @@
 package rutagastronomicamadrid.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rutagastronomicamadrid.controller.RestauranteController;
 import rutagastronomicamadrid.model.PlatoTipico;
 import rutagastronomicamadrid.repository.PlatoTipicoRepository;
 
@@ -10,6 +13,7 @@ import java.util.List;
 @Service
 public class PlatoTipicoService {
 
+    private static final Logger log = LoggerFactory.getLogger(RestauranteController.class);
     private final PlatoTipicoRepository platoTipicoRepository;
 
     @Autowired
@@ -38,6 +42,7 @@ public class PlatoTipicoService {
     }
 
     public List<PlatoTipico> buscarPorNombreODescripcion(String texto) {
+        log.info("buscarPorNombreODescripcion - texto: {}", texto);
         return platoTipicoRepository.findByNombreOrDescripcionContainingIgnoreCase(texto, texto);
     }
 
