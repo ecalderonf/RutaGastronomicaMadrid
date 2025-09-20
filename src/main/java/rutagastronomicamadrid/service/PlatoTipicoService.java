@@ -46,4 +46,9 @@ public class PlatoTipicoService {
         return platoTipicoRepository.findByNombreOrDescripcionContainingIgnoreCase(texto, texto);
     }
 
+    public List<PlatoTipico> obtenerTop10PlatosPorRestaurantes() {
+        return platoTipicoRepository.findTop10PlatosPorRestaurantes();
+    }
+
+
 }

@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Restaurante {
@@ -162,7 +164,7 @@ public class Restaurante {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", photoreference='" + photoreference + '\'' +
-                ", platosTipicos=" + platosTipicos +
+                ", platosTipicos=" + platosTipicos.size() +
                 '}';
     }
 }

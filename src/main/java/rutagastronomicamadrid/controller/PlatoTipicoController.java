@@ -1,6 +1,8 @@
 package rutagastronomicamadrid.controller;
 
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class PlatoTipicoController {
 
+    private static final Logger log = LoggerFactory.getLogger(RestauranteController.class);
     private final PlatoTipicoService platosTipicosService;
 
     @Autowired
@@ -24,6 +27,15 @@ public class PlatoTipicoController {
     // Obtener todos los platos típicos
     @GetMapping("")
     List<PlatoTipico> buscarPlatosTipicos(){ return platosTipicosService.buscarPlatosTipicos(); }
+
+    // Obtener platos top
+    @GetMapping("/top10")
+    public ResponseEntity<List<PlatoTipico>> obtenerTop10Platos() {
+        List<PlatoTipico> topPlatos = platosTipicosService.obtenerTop10PlatosPorRestaurantes();
+        log.info(" → Top 10 platos típicos ({} elementos)", topPlatos.size());
+        topPlatos.forEach(p -> log.info(" → [{}] {}", p.getId_plato(), p.getNombre()));
+        return ResponseEntity.ok(topPlatos);
+    }
 
     // Obtener plato tipico por Id
     @GetMapping("/id/{id}")

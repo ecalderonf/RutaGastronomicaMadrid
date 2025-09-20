@@ -1,13 +1,16 @@
 package rutagastronomicamadrid.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import rutagastronomicamadrid.controller.RestauranteController;
 import rutagastronomicamadrid.feign.RestauranteClient;
+import rutagastronomicamadrid.model.PlatoTipico;
 import rutagastronomicamadrid.model.Restaurante;
 import rutagastronomicamadrid.repository.RestauranteRepository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,6 +18,8 @@ public class RestauranteService {
 
     @Value("${google.api.key}")
     private String apiKey;
+
+    private static final Logger log = LoggerFactory.getLogger(RestauranteController.class);
 
     private final RestauranteRepository restauranteRepository;
 
@@ -37,9 +42,14 @@ public class RestauranteService {
         return restauranteRepository.findByReference(reference);
     }
 
-    public List<Restaurante> buscarPorNombrePlatoTipico(String nombrePlato) {
+    public List<Restaurante> obtenerPorNombrePlatoTipico(String nombrePlato) {
         return restauranteRepository.findByNombrePlatoTipico(nombrePlato.trim());
     }
+
+    public List<Restaurante> obtenerTop10PorRating() {
+        return restauranteRepository.findTop10ByOrderByRatingDesc();
+    }
+
     public Restaurante guardar(Restaurante restaurante) {
         return restauranteRepository.save(restaurante);
     }
@@ -64,9 +74,10 @@ public class RestauranteService {
                 .orElseThrow(() -> new RuntimeException("Restaurante no encontrado"));
     }
 
-    public List<Restaurante> obtenerTopRestaurantes(String platoTipico) {
+
+    public List<Restaurante> obtenerRestaurantes(String platoTipico) {
         String query = String.format(
-                "10 mejores restaurantes españoles en capital Madrid que vendan %s",
+                "restaurantes o bares españoles en capital Madrid que vendan %s",
                 platoTipico
         );
         var response = client.buscarRestaurantes(query, apiKey);

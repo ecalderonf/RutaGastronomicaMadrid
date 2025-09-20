@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.Objects;
+
 @Entity
 public class PlatoTipico {
     @Id
@@ -91,6 +93,19 @@ public class PlatoTipico {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlatoTipico that = (PlatoTipico) o;
+        return Objects.equals(nombre, that.nombre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre);
     }
 
     @Override

@@ -13,4 +13,7 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long> 
 
     @Query("SELECT r FROM Restaurante r JOIN r.platosTipicos p WHERE LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombrePlato, '%'))")
     List<Restaurante> findByNombrePlatoTipico(@Param("nombrePlato") String nombrePlato);
+
+    List<Restaurante> findTop10ByOrderByRatingDesc();
+
 }
