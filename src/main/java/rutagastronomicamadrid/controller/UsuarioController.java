@@ -3,7 +3,9 @@ package rutagastronomicamadrid.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rutagastronomicamadrid.dto.LoginDTO;
 import rutagastronomicamadrid.dto.UsuarioDTO;
 import rutagastronomicamadrid.service.UsuarioService;
 import java.util.List;
@@ -39,6 +41,11 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id ) {
         usuarioService.delete(id);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginDTO dto) {
+        return usuarioService.login(dto);
     }
 
 

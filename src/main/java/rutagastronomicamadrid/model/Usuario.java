@@ -12,23 +12,25 @@ public class Usuario {
     private Long id;
 
     private String nombre;
-    private String descripcion;
-    private String direccion;
-    private String telefono;
-    private String email;
+
+    @OneToOne
+    @JoinColumn(name = "restaurante_id", referencedColumnName = "id_restaurante")
+    private Restaurante restaurante;
+
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
+
 
     private String password;
 
     public Usuario() {
     }
 
-    public Usuario(Long id, String nombre, String descripcion, String direccion, String telefono, String email, String password) {
+    public Usuario(Long id, String nombre, Restaurante restaurante, Rol rol, String password) {
         this.id = id;
         this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.direccion = direccion;
-        this.telefono = telefono;
-        this.email = email;
+        this.restaurante = restaurante;
+        this.rol = rol;
         this.password = password;
     }
 
@@ -48,36 +50,20 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public Restaurante getRestaurante() {
+        return restaurante;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setRestaurante(Restaurante restaurante) {
+        this.restaurante = restaurante;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public Rol getRol() {
+        return rol;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setRol(Rol rol) {
+        this.rol = rol;
     }
 
     public String getPassword() {
