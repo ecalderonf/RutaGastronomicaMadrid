@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import rutagastronomicamadrid.controller.RestauranteController;
+import rutagastronomicamadrid.dto.RestauranteAltaDTO;
 import rutagastronomicamadrid.feign.RestauranteClient;
-import rutagastronomicamadrid.model.PlatoTipico;
 import rutagastronomicamadrid.model.Restaurante;
 import rutagastronomicamadrid.repository.RestauranteRepository;
 
@@ -75,10 +75,30 @@ public class RestauranteService {
     }
 
 
-    public List<Restaurante> obtenerRestaurantes(String platoTipico) {
+    public List<Restaurante> obtenerRestaurantesPorPlato(String platoTipico) {
         String query = String.format(
                 "restaurantes o bares españoles en capital Madrid que vendan %s",
                 platoTipico
+        );
+        var response = client.buscarRestaurantes(query, apiKey);
+
+        return response.getBody().results().stream()
+                .map(r -> new Restaurante(
+                        r.reference(),
+                        r.name(),
+                        r.domicilio(),
+                        r.priceLevel(),
+                        r.rating(),
+                        r.geometry().location().lat(),
+                        r.geometry().location().lng(),
+                        r.photos() != null && !r.photos().isEmpty() ? r.photos().get(0).photoReference() : null
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<Restaurante> obtenerRestaurantesPorNombre(RestauranteAltaDTO restauranteAltaDTO) {
+        String query = String.format(" \"%s\" + %s",
+                restauranteAltaDTO.getNombre(), restauranteAltaDTO.getCodigoPostal()
         );
         var response = client.buscarRestaurantes(query, apiKey);
 

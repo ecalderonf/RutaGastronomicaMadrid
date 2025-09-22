@@ -1,9 +1,11 @@
 package rutagastronomicamadrid.controller;
 
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rutagastronomicamadrid.dto.RestauranteAltaDTO;
 import rutagastronomicamadrid.model.PlatoTipico;
 import rutagastronomicamadrid.model.Restaurante;
 import rutagastronomicamadrid.service.PlatoTipicoService;
@@ -66,8 +68,18 @@ public class RestauranteController {
     }
 
     @PostMapping
-    public ResponseEntity<Restaurante> crear(@RequestBody Restaurante restaurante) {
-        return ResponseEntity.ok(restauranteService.guardar(restaurante));
+    public ResponseEntity<Restaurante> crear(@Valid @RequestBody RestauranteAltaDTO restauranteAltaDTO) {
+
+        // Restaurantes
+        List<Restaurante> restauranteList = restauranteService.obtenerRestaurantesPorNombre(restauranteAltaDTO);
+        log.info(" - restauranteList ({} elementos):", restauranteList.size());
+
+        if(restauranteList.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            return ResponseEntity.ok(restauranteService.guardar(restauranteList.get(0)));
+        }
     }
 
     @PostMapping("/carga-por-plato")
@@ -76,11 +88,11 @@ public class RestauranteController {
         log.info(" → platoTipico: {}", platoTipico);
 
         // Restaurantes
-        List<Restaurante> restauranteList = restauranteService.obtenerRestaurantes(platoTipico);
+        List<Restaurante> restauranteList = restauranteService.obtenerRestaurantesPorPlato(platoTipico);
         log.info(" - restauranteList ({} elementos):", restauranteList.size());
 
         // Plato típico
-        List<PlatoTipico> platosTipicosBD = platoTipicoService.buscarPorNombreODescripcion(platoTipico);
+        List<PlatoTipico> platosTipicosBD = platoTipicoService.buscarPorNombre(platoTipico);
         if(platosTipicosBD.isEmpty()){
             log.info(" → platosTipicosBD (Lista vacía)");
         } else {

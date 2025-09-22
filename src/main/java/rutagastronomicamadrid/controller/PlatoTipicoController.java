@@ -54,7 +54,7 @@ public class PlatoTipicoController {
     @GetMapping("/nombre/{texto}")
     public ResponseEntity<?> buscarPorNombreODescripcion(@PathVariable String texto) {
         try {
-            List<PlatoTipico> platoTipicoResult = platosTipicosService.buscarPorNombreODescripcion(texto);
+            List<PlatoTipico> platoTipicoResult = platosTipicosService.buscarPorNombre(texto);
             return ResponseEntity.ok(platoTipicoResult);
         } catch (Exception e) {
             e.printStackTrace();

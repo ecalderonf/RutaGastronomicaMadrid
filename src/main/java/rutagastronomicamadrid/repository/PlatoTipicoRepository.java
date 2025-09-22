@@ -7,7 +7,7 @@ import rutagastronomicamadrid.model.PlatoTipico;
 import java.util.List;
 
 public interface PlatoTipicoRepository extends JpaRepository<PlatoTipico, Long> {
-    List<PlatoTipico> findByNombreOrDescripcionContainingIgnoreCase(String nombre, String descripcion);
+    List<PlatoTipico> findByNombreContainingIgnoreCase(String nombre);
 
     @Query(value = """
     SELECT pt.*

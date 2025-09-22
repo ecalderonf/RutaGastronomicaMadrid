@@ -41,9 +41,9 @@ public class PlatoTipicoService {
         platoTipicoRepository.deleteById(id);
     }
 
-    public List<PlatoTipico> buscarPorNombreODescripcion(String texto) {
-        log.info("buscarPorNombreODescripcion - texto: {}", texto);
-        return platoTipicoRepository.findByNombreOrDescripcionContainingIgnoreCase(texto, texto);
+    public List<PlatoTipico> buscarPorNombre(String texto) {
+        log.info("buscarPorNombre - texto: {}", texto);
+        return platoTipicoRepository.findByNombreContainingIgnoreCase(texto);
     }
 
     public List<PlatoTipico> obtenerTop10PlatosPorRestaurantes() {
