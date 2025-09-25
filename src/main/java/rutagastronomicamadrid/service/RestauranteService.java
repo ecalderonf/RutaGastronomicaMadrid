@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import rutagastronomicamadrid.controller.RestauranteController;
 import rutagastronomicamadrid.dto.RestauranteAltaDTO;
 import rutagastronomicamadrid.feign.RestauranteClient;
+import rutagastronomicamadrid.model.PlatoTipico;
 import rutagastronomicamadrid.model.Restaurante;
+import rutagastronomicamadrid.model.Usuario;
 import rutagastronomicamadrid.repository.RestauranteRepository;
+import rutagastronomicamadrid.repository.UsuarioRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,13 +22,16 @@ public class RestauranteService {
     @Value("${google.api.key}")
     private String apiKey;
 
+    private final UsuarioRepository usuarioRepository;
+
     private static final Logger log = LoggerFactory.getLogger(RestauranteController.class);
 
     private final RestauranteRepository restauranteRepository;
 
     private final RestauranteClient client;
 
-    public RestauranteService(RestauranteRepository restauranteRepository, RestauranteClient client) {
+    public RestauranteService(UsuarioRepository usuarioRepository, RestauranteRepository restauranteRepository, RestauranteClient client) {
+        this.usuarioRepository = usuarioRepository;
         this.restauranteRepository = restauranteRepository;
         this.client = client;
     }
@@ -55,6 +61,17 @@ public class RestauranteService {
     }
 
     public void eliminar(Long id) {
+        Restaurante restaurante = restauranteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Restaurante no encontrado"));
+
+        // Desasociar usuarios manualmente
+        List<Usuario> usuarios = usuarioRepository.findByRestaurante(restaurante);
+        for (Usuario usuario : usuarios) {
+            usuario.setRestaurante(null);
+        }
+        usuarioRepository.saveAll(usuarios);
+
+
         restauranteRepository.deleteById(id);
     }
 

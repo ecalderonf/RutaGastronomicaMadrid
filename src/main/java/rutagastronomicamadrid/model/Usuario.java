@@ -14,7 +14,7 @@ public class Usuario {
     private String nombre;
 
     @OneToOne
-    @JoinColumn(name = "restaurante_id", referencedColumnName = "id_restaurante")
+    @JoinColumn(name = "restaurante_id", referencedColumnName = "id_restaurante", nullable = true)
     private Restaurante restaurante;
 
     @Enumerated(EnumType.STRING)

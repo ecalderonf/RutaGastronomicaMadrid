@@ -13,7 +13,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/platosTipicos")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {
+        "http://localhost:4200",
+        "http://gastromadrid.pickmyskills.com"
+})
 public class PlatoTipicoController {
 
     private static final Logger log = LoggerFactory.getLogger(RestauranteController.class);

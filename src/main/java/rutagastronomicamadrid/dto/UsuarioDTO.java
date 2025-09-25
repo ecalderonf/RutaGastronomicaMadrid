@@ -8,12 +8,10 @@ public class UsuarioDTO {
 
     private Long id;
 
-    @NotBlank(message = "El nombre es obligatorio")
-    @Size(max = 100, message = "El nombre no puede tener más de 100 caracteres")
+
     private String nombre;
 
-    @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
+
     private String password;
 
     private Rol rol;

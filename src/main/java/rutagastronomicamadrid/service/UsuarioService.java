@@ -18,6 +18,7 @@ import rutagastronomicamadrid.repository.RestauranteRepository;
 import rutagastronomicamadrid.repository.UsuarioRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -105,4 +106,40 @@ public class UsuarioService {
 
         return new UsuarioDTO(usuario);
     }
+
+    public Optional<Usuario> getByUsername(String username) {
+        return usuarioRepository.findByNombre(username);
+    }
+
+    public UsuarioDTO update(Long id, UsuarioDTO dto) {
+        Usuario usuarioExistente = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+        // Solo actualiza si viene un nuevo nombre
+        if (dto.getNombre() != null) {
+            usuarioExistente.setNombre(dto.getNombre());
+        }
+
+        // Solo actualiza si viene un nuevo restauranteId
+        if (dto.getRestauranteId() != null) {
+            Restaurante restaurante = restauranteRepository.findById(dto.getRestauranteId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Restaurante no válido"));
+            usuarioExistente.setRestaurante(restaurante);
+        }
+
+        // Solo actualiza si viene un nuevo rol
+        if (dto.getRol() != null) {
+            usuarioExistente.setRol(dto.getRol());
+        }
+
+        // Solo actualiza si viene una nueva contraseña
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            String encryptedPassword = passwordEncoder.encode(dto.getPassword());
+            usuarioExistente.setPassword(encryptedPassword);
+        }
+
+        Usuario actualizado = usuarioRepository.save(usuarioExistente);
+        return new UsuarioDTO(actualizado);
+    }
+
 }
